@@ -1,0 +1,31 @@
+<div class="page-content">
+  <div class="toolbar">
+    <button class="btn-dym btn-secondary"><mat-icon>chevron_left</mat-icon> Semana anterior</button>
+    <span style="font-size:13px;font-weight:700;color:#0f172a">Semana: 11 – 17 de mayo 2026</span>
+    <button class="btn-dym btn-secondary">Semana siguiente <mat-icon>chevron_right</mat-icon></button>
+  </div>
+  <div class="dym-card">
+    <div class="dym-card-header">
+      <mat-icon style="color:#4caf50">calendar_month</mat-icon>
+      <span class="dym-card-title">Vista semanal por área</span>
+      <div style="display:flex;gap:8px;font-size:11px">
+        <span style="padding:3px 8px;background:#e8f5e9;color:#2e7d32;border-radius:4px;font-weight:700">☀ Mañana 06–14</span>
+        <span style="padding:3px 8px;background:#e3f2fd;color:#1565c0;border-radius:4px;font-weight:700">🌤 Tarde 14–22</span>
+        <span style="padding:3px 8px;background:#ede9fe;color:#5b21b6;border-radius:4px;font-weight:700">🌙 Noche 22–06</span>
+      </div>
+    </div>
+    <div style="padding:14px;overflow-x:auto">
+      <div [style.display]="'grid'" [style.grid-template-columns]="'100px repeat(7,1fr)'" [style.gap]="'3px'">
+        <div></div>
+        <div *ngFor="let d of days" style="padding:8px 4px;text-align:center;font-size:11px;font-weight:700;color:#64748b;background:#f8fafc;border-radius:6px">{{d}}</div>
+        <ng-container *ngFor="let area of areas; let i=index">
+          <div style="padding:6px 8px 6px 0;font-size:11px;font-weight:600;color:#64748b;display:flex;align-items:center;justify-content:flex-end">{{area}}</div>
+          <div *ngFor="let cls of pattern[i]"
+            [class]="'schedule-slot '+cls" (click)="click(area, days[pattern[i].indexOf(cls)])">
+            {{emoji(cls)}}
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

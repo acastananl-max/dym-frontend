@@ -1,0 +1,17 @@
+<div class="page-content">
+  <div class="grid-2">
+    <div class="report-card" *ngFor="let r of reports">
+      <div class="report-icon" [style.background]="r.bg" [style.color]="r.color">
+        <mat-icon>{{r.icon}}</mat-icon>
+      </div>
+      <div style="flex:1">
+        <div class="report-name">{{r.label}}</div>
+        <div class="report-desc">{{r.desc}}</div>
+      </div>
+      <div class="report-actions">
+        <button class="btn-export btn-pdf"   (click)="export(r.label,'PDF')"><mat-icon style="font-size:14px;width:14px;height:14px">picture_as_pdf</mat-icon> PDF</button>
+        <button class="btn-export btn-excel" (click)="export(r.label,'Excel')"><mat-icon style="font-size:14px;width:14px;height:14px">table_chart</mat-icon> XLS</button>
+      </div>
+    </div>
+  </div>
+</div>

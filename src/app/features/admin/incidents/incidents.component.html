@@ -1,0 +1,43 @@
+<div class="page-content">
+  <div class="grid-3">
+    <div class="metric-card">
+      <div class="metric-icon" style="background:#fef3c7;color:#92400e"><mat-icon>hourglass_top</mat-icon></div>
+      <div><div class="metric-value" style="color:#92400e">{{incidents.length}}</div><div class="metric-label">Pendientes</div></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon" style="background:#dcfce7;color:#166534"><mat-icon>check_circle</mat-icon></div>
+      <div><div class="metric-value" style="color:#166534">—</div><div class="metric-label">Aprobadas este mes</div></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon" style="background:#fee2e2;color:#991b1b"><mat-icon>cancel</mat-icon></div>
+      <div><div class="metric-value" style="color:#991b1b">—</div><div class="metric-label">Rechazadas este mes</div></div>
+    </div>
+  </div>
+
+  <div class="dym-card">
+    <div class="dym-card-header">
+      <mat-icon style="color:#ffa726">inbox</mat-icon>
+      <span class="dym-card-title">Bandeja de aprobaciones</span>
+      <span class="badge badge-pending">{{incidents.length}} pendientes</span>
+    </div>
+
+    <div *ngIf="incidents.length; else empty">
+      <div class="incident-item" *ngFor="let inc of incidents">
+        <div class="incident-icon" [style.background]="typeBg[inc.type]" [style.color]="typeColor[inc.type]">
+          <mat-icon style="font-size:18px;width:18px;height:18px">{{typeIcons[inc.type]}}</mat-icon>
+        </div>
+        <div class="incident-info">
+          <div class="incident-title">{{inc.employeeName}} — {{typeLabel[inc.type]}}</div>
+          <div class="incident-sub">{{inc.department}} · {{formatDate(inc.startDate)}}{{inc.endDate ? " → " + formatDate(inc.endDate) : ""}} · "{{inc.reason}}"</div>
+        </div>
+        <div class="incident-actions">
+          <button class="btn-approve" (click)="approve(inc.id)"><mat-icon style="font-size:14px;width:14px;height:14px">check</mat-icon> Aprobar</button>
+          <button class="btn-reject"  (click)="reject(inc.id)"><mat-icon  style="font-size:14px;width:14px;height:14px">close</mat-icon> Rechazar</button>
+        </div>
+      </div>
+    </div>
+    <ng-template #empty>
+      <div class="empty-state"><mat-icon style="color:#4caf50">check_circle</mat-icon><p>No hay solicitudes pendientes ✓</p></div>
+    </ng-template>
+  </div>
+</div>

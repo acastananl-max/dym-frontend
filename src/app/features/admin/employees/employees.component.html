@@ -1,0 +1,78 @@
+<div class="page-content">
+  <div class="toolbar">
+    <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:7px 12px;flex:1;max-width:320px">
+      <mat-icon style="color:#94a3b8;font-size:18px;width:18px;height:18px">search</mat-icon>
+      <input style="border:none;outline:none;font-size:13px;flex:1;background:transparent" placeholder="Buscar empleado, código, área..." [(ngModel)]="search" (input)="applyFilter()">
+    </div>
+    <div class="toolbar-right">
+      <button class="btn-dym btn-primary" (click)="openAdd()"><mat-icon>person_add</mat-icon> Nuevo empleado</button>
+    </div>
+  </div>
+
+  <div class="dym-card">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Empleado</th><th>Código</th><th>Departamento</th><th>Turno</th><th>Estado</th><th>Rol</th><th>Contratación</th><th>Acciones</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let e of filtered">
+            <td><div class="td-flex">
+              <div class="avatar avatar-sm" [style.background]="e.color">{{e.initials}}</div>
+              <div><div style="font-weight:600;color:#0f172a">{{e.fullName}}</div><div style="font-size:11px;color:#64748b">{{e.email}}</div></div>
+            </div></td>
+            <td><span class="code-chip">{{e.employeeCode}}</span></td>
+            <td>{{e.department}}</td>
+            <td><span class="badge badge-active" style="background:#e8f5e9;color:#2e7d32">{{e.shift}}</span></td>
+            <td><span class="badge" [class]="e.active ? 'badge-active' : 'badge-inactive'">{{e.active ? "Activo" : "Inactivo"}}</span></td>
+            <td><span class="badge" [class]="e.role==='ADMIN' ? 'badge-admin' : 'badge-employee'">{{e.role}}</span></td>
+            <td style="color:#64748b;font-size:12px">{{e.hireDate | date:"dd/MM/yyyy"}}</td>
+            <td><div style="display:flex;gap:5px">
+              <button class="btn-sm-green" (click)="openEdit(e)"><mat-icon style="font-size:14px;width:14px;height:14px">edit</mat-icon> Editar</button>
+              <button [class]="e.active ? 'btn-sm-red' : 'btn-sm-green'" (click)="toggle(e)">
+                <mat-icon style="font-size:14px;width:14px;height:14px">{{e.active ? 'person_off' : 'person'}}</mat-icon>
+              </button>
+            </div></td>
+          </tr>
+          <tr *ngIf="!filtered.length"><td colspan="8"><div class="empty-state"><mat-icon>person_search</mat-icon><p>Sin resultados</p></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="padding:12px 16px;font-size:12px;color:#64748b;border-top:1px solid #e2e8f0">
+      Mostrando {{filtered.length}} de {{employees.length}} empleados
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div *ngIf="showModal" style="position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:1000" (click)="showModal=false">
+  <div style="background:#fff;border-radius:14px;padding:28px;width:520px;max-width:95vw;box-shadow:0 20px 40px rgba(0,0,0,.2);animation:slideUp .25s ease" (click)="$event.stopPropagation()">
+    <div style="font-size:16px;font-weight:800;color:#0f172a;margin-bottom:20px;display:flex;align-items:center;gap:8px">
+      <mat-icon [style.color]="editing ? '#1e88e5' : '#4caf50'">{{editing ? 'edit' : 'person_add'}}</mat-icon>
+      {{editing ? 'Editar empleado' : 'Nuevo empleado'}}
+    </div>
+    <form [formGroup]="form">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <mat-form-field appearance="outline" style="width:100%"><mat-label>Nombre</mat-label><input matInput formControlName="firstName"></mat-form-field>
+        <mat-form-field appearance="outline" style="width:100%"><mat-label>Apellido</mat-label><input matInput formControlName="lastName"></mat-form-field>
+        <mat-form-field appearance="outline" style="width:100%"><mat-label>Email</mat-label><input matInput type="email" formControlName="email"></mat-form-field>
+        <mat-form-field appearance="outline" style="width:100%"><mat-label>Contraseña {{editing ? "(dejar vacío = sin cambio)" : ""}}</mat-label><input matInput type="password" formControlName="password"></mat-form-field>
+        <mat-form-field appearance="outline" style="width:100%"><mat-label>Teléfono</mat-label><input matInput formControlName="phone"></mat-form-field>
+        <mat-form-field appearance="outline" style="width:100%">
+          <mat-label>Departamento</mat-label>
+          <mat-select formControlName="department"><mat-option *ngFor="let d of departments" [value]="d">{{d}}</mat-option></mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" style="width:100%">
+          <mat-label>Turno</mat-label>
+          <mat-select formControlName="shift"><mat-option *ngFor="let s of shifts" [value]="s.split(' ')[0]">{{s}}</mat-option></mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" style="width:100%">
+          <mat-label>Rol</mat-label>
+          <mat-select formControlName="role"><mat-option value="EMPLOYEE">Empleado</mat-option><mat-option value="ADMIN">Admin</mat-option></mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;padding-top:16px;border-top:1px solid #e2e8f0">
+      <button class="btn-dym btn-secondary" (click)="showModal=false">Cancelar</button>
+      <button class="btn-dym btn-primary" (click)="save()" [disabled]="form.invalid"><mat-icon>save</mat-icon> Guardar</button>
+    </div>
+  </div>
+</div>

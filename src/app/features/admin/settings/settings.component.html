@@ -1,0 +1,25 @@
+<div class="page-content">
+  <div class="grid-2">
+    <div class="dym-card">
+      <div class="dym-card-header"><mat-icon style="color:#4caf50">tune</mat-icon><span class="dym-card-title">Reglas de marcaje</span></div>
+      <div class="dym-card-body">
+        <div *ngFor="let r of rules" style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #e2e8f0">
+          <span style="flex:1;font-size:13px;color:#64748b">{{r.label}}</span>
+          <input [(ngModel)]="r.value" style="width:60px;padding:5px 8px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;text-align:center;outline:none">
+          <span style="font-size:12px;color:#94a3b8;min-width:36px">{{r.unit}}</span>
+        </div>
+        <div style="height:12px"></div>
+        <button class="btn-dym btn-primary" style="width:100%" (click)="save()"><mat-icon>save</mat-icon> Guardar reglas</button>
+      </div>
+    </div>
+    <div class="dym-card">
+      <div class="dym-card-header"><mat-icon style="color:#ffa726">notifications_active</mat-icon><span class="dym-card-title">Alertas automáticas</span></div>
+      <div class="dym-card-body">
+        <div *ngFor="let a of alerts" style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #e2e8f0">
+          <div style="flex:1"><div style="font-size:12px;font-weight:600">{{a.label}}</div><div style="font-size:11px;color:#64748b">{{a.desc}}</div></div>
+          <mat-slide-toggle [(ngModel)]="a.on" color="primary"></mat-slide-toggle>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

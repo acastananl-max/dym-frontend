@@ -1,0 +1,2 @@
+export type AttendanceStatus = "PRESENT" | "ABSENT" | "LATE" | "PARTIAL";
+export interface Attendance { id: number; employeeId: number; employeeName: string; employeeCode: string; department: string; checkIn: string; checkOut: string | null; checkInType: string; workedMinutes: number | null; delayMinutes: number; extraMinutes: number; status: AttendanceStatus; }

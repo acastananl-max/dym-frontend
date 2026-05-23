@@ -1,0 +1,3 @@
+export type RoleType = "ADMIN" | "EMPLOYEE";
+export interface Employee { id: number; employeeCode: string; firstName: string; lastName: string; email: string; phone: string; department: string; shift: string; color: string; hireDate: string; active: boolean; role: RoleType; fullName: string; initials: string; }
+export interface EmployeeRequest { firstName: string; lastName: string; email: string; password?: string; phone?: string; department: string; shift: string; color?: string; hireDate?: string; role?: RoleType; }

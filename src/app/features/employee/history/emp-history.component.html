@@ -1,0 +1,27 @@
+<div class="page-content">
+  <div class="summary-row">
+    <div class="summary-item"><div class="summary-num" style="color:#4caf50">{{history.length}}</div><div class="summary-lab">Registros</div></div>
+    <div class="summary-item"><div class="summary-num" style="color:#ffa726">{{history.length > 0 ? (history[0].delayMinutes > 0 ? 1 : 0) : 0}}</div><div class="summary-lab">Con tardanza</div></div>
+    <div class="summary-item"><div class="summary-num" style="color:#1e88e5">—</div><div class="summary-lab">Horas extra</div></div>
+  </div>
+  <div class="dym-card">
+    <div class="dym-card-header"><mat-icon style="color:#4caf50">history</mat-icon><span class="dym-card-title">Mi historial de asistencia</span></div>
+    <div *ngIf="loading" class="empty-state"><mat-icon>hourglass_top</mat-icon><p>Cargando...</p></div>
+    <div class="table-wrap" *ngIf="!loading">
+      <table>
+        <thead><tr><th>Fecha</th><th>Entrada</th><th>Salida</th><th>Trabajado</th><th>Estado</th><th>Tardanza</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let a of history">
+            <td style="font-weight:600">{{formatDate(a.checkIn)}}</td>
+            <td style="font-family:monospace">{{formatTime(a.checkIn)}}</td>
+            <td style="font-family:monospace">{{formatTime(a.checkOut)}}</td>
+            <td style="font-weight:600">{{workedStr(a.workedMinutes)}}</td>
+            <td><span [class]="badgeClass(a.status)">{{statusLabel(a.status)}}</span></td>
+            <td [style.color]="a.delayMinutes>0?'#d97706':'#94a3b8'">{{a.delayMinutes > 0 ? a.delayMinutes+"min" : "—"}}</td>
+          </tr>
+          <tr *ngIf="!history.length"><td colspan="6"><div class="empty-state"><mat-icon>history</mat-icon><p>Sin registros aún</p></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

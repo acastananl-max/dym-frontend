@@ -1,0 +1,94 @@
+<div class="page-content" *ngIf="!loading; else loadTpl">
+
+  <!-- Metrics -->
+  <div class="metrics-row">
+    <div class="metric-card">
+      <div class="metric-icon" style="background:#e8f5e9;color:#2e7d32"><mat-icon>person_check</mat-icon></div>
+      <div><div class="metric-value" style="color:#2e7d32">{{summary?.presentToday || 0}}</div><div class="metric-label">Presentes hoy</div><div class="metric-delta delta-up"><mat-icon style="font-size:13px;width:13px;height:13px">arrow_upward</mat-icon> En planta</div></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon" style="background:#fee2e2;color:#b71c1c"><mat-icon>person_off</mat-icon></div>
+      <div><div class="metric-value" style="color:#b71c1c">{{summary?.absentToday || 0}}</div><div class="metric-label">Ausentes</div><div class="metric-delta delta-down"><mat-icon style="font-size:13px;width:13px;height:13px">arrow_downward</mat-icon> Sin marcaje</div></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon" style="background:#fff3e0;color:#e65100"><mat-icon>schedule</mat-icon></div>
+      <div><div class="metric-value" style="color:#e65100">{{summary?.lateToday || 0}}</div><div class="metric-label">Tardanzas</div><div class="metric-delta delta-down"><mat-icon style="font-size:13px;width:13px;height:13px">arrow_upward</mat-icon> Hoy</div></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon" style="background:#fef3c7;color:#92400e"><mat-icon>warning_amber</mat-icon></div>
+      <div><div class="metric-value" style="color:#92400e">{{summary?.pendingIncidents || 0}}</div><div class="metric-label">Incidencias pendientes</div><div class="metric-delta delta-flat"><mat-icon style="font-size:13px;width:13px;height:13px">remove</mat-icon> Por aprobar</div></div>
+    </div>
+  </div>
+
+  <!-- Main grid -->
+  <div class="grid-6-4">
+    <!-- Feed -->
+    <div class="dym-card">
+      <div class="dym-card-header">
+        <mat-icon style="color:#4caf50">cell_tower</mat-icon>
+        <span class="dym-card-title">Marcajes recientes</span>
+        <div class="live-pill"><span class="live-dot"></span>En vivo</div>
+      </div>
+      <div *ngIf="feed.length; else noFeed">
+        <div class="feed-item" *ngFor="let a of feed.slice(0,6)">
+          <div class="avatar" [style.background]="'#4caf50'">{{initials(a.employeeName)}}</div>
+          <div class="feed-info">
+            <div class="feed-name">{{a.employeeName}}</div>
+            <div class="feed-sub">{{a.department}} &middot; {{a.employeeCode}}</div>
+          </div>
+          <div class="feed-right">
+            <span class="badge" [style.background]="getAttColor(a.status)" [style.color]="getAttTextColor(a.status)">{{getAttText(a.status)}}</span>
+            <span class="feed-time">{{formatTime(a.checkIn)}}</span>
+          </div>
+        </div>
+      </div>
+      <ng-template #noFeed><div class="empty-state"><mat-icon>cell_tower</mat-icon><p>Sin marcajes recientes</p></div></ng-template>
+    </div>
+
+    <!-- Right col -->
+    <div class="right-col">
+      <!-- Donut -->
+      <div class="dym-card">
+        <div class="dym-card-header"><mat-icon style="color:#4caf50">pie_chart</mat-icon><span class="dym-card-title">Asistencia hoy</span></div>
+        <div class="chart-wrap"><canvas id="chart-donut" height="140"></canvas></div>
+        <div style="padding:0 16px 14px;display:flex;flex-direction:column;gap:5px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px"><div style="width:10px;height:10px;border-radius:50%;background:#4caf50;flex-shrink:0"></div><span style="flex:1;color:#64748b">Presentes</span><strong>{{summary?.presentToday}}</strong></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px"><div style="width:10px;height:10px;border-radius:50%;background:#e53935;flex-shrink:0"></div><span style="flex:1;color:#64748b">Ausentes</span><strong>{{summary?.absentToday}}</strong></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px"><div style="width:10px;height:10px;border-radius:50%;background:#ffa726;flex-shrink:0"></div><span style="flex:1;color:#64748b">Tardanzas</span><strong>{{summary?.lateToday}}</strong></div>
+        </div>
+      </div>
+      <!-- Risk -->
+      <div class="dym-card">
+        <div class="dym-card-header"><mat-icon style="color:#e53935">crisis_alert</mat-icon><span class="dym-card-title">Riesgo de ausentismo</span></div>
+        <div class="risk-item" *ngFor="let r of risks" [class]="r.level">
+          <div class="risk-names"><div class="risk-name">{{r.name}}</div><div class="risk-dept">{{r.dept}}</div></div>
+          <div class="risk-bar-wrap"><div class="risk-bar-bg"><div class="risk-bar-fill" [style.width.%]="r.score" [style.background]="getRiskColor(r.level)"></div></div></div>
+          <div class="risk-score" [style.color]="getRiskColor(r.level)">{{r.score}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Heatmap -->
+  <div class="dym-card">
+    <div class="dym-card-header"><mat-icon style="color:#4caf50">grid_on</mat-icon><span class="dym-card-title">Mapa de calor &mdash; Asistencia semanal por área</span></div>
+    <div class="heatmap-grid">
+      <div></div>
+      <div class="hm-day-label" *ngFor="let d of heatmap.days">{{d}}</div>
+      <ng-container *ngFor="let area of heatmap.areas; let i = index">
+        <div class="hm-area-label">{{area.substring(0,10)}}</div>
+        <div class="hm-cell" *ngFor="let cls of heatmap.values[i]" [class]="cls" [title]="area + ' · ' + getHmLabel(cls)">{{getHmLabel(cls)}}</div>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- Bar chart -->
+  <div class="dym-card">
+    <div class="dym-card-header"><mat-icon style="color:#4caf50">bar_chart</mat-icon><span class="dym-card-title">Asistencia (últimas 4 semanas)</span></div>
+    <div class="chart-wrap"><canvas id="chart-bar" height="90"></canvas></div>
+  </div>
+</div>
+
+<ng-template #loadTpl>
+  <div class="empty-state"><mat-icon>hourglass_top</mat-icon><p>Cargando dashboard...</p></div>
+</ng-template>

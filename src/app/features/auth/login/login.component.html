@@ -1,0 +1,45 @@
+<div class="login-screen">
+  <div class="login-card">
+    <div class="login-logo-wrap">
+      <img class="login-logo-img" src="assets/logo-dym.png" alt="Logo DYM">
+    </div>
+    <h1 class="login-title">AsistenteDYM</h1>
+    <p class="login-sub">Sistema de Control de Asistencia &mdash; Maquila DYM</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <mat-form-field appearance="outline" class="full-width" style="margin-bottom:10px">
+        <mat-label>Correo electrónico</mat-label>
+        <input matInput formControlName="email" type="email" placeholder="usuario@dym.com">
+        <mat-icon matSuffix>email</mat-icon>
+        <mat-error *ngIf="form.get('email')?.hasError('email')">Correo inválido</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width" style="margin-bottom:18px">
+        <mat-label>Contraseña</mat-label>
+        <input matInput formControlName="password" [type]="hidePass ? 'password' : 'text'">
+        <button mat-icon-button matSuffix type="button" (click)="hidePass=!hidePass">
+          <mat-icon>{{hidePass ? "visibility_off" : "visibility"}}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" class="full-width btn-dym btn-primary" style="height:44px;font-size:14px" [disabled]="loading">
+        <mat-spinner *ngIf="loading" diameter="18" style="margin-right:8px;display:inline-block"></mat-spinner>
+        <mat-icon *ngIf="!loading">login</mat-icon>
+        {{ loading ? "Iniciando sesión..." : "Iniciar sesión" }}
+      </button>
+    </form>
+
+    <div class="login-divider">Acceso rápido para demostración</div>
+
+    <div class="demo-row">
+      <button class="btn-demo" type="button" (click)="quickLogin('admin')" [disabled]="loading">
+        <mat-icon style="font-size:16px;width:16px;height:16px">admin_panel_settings</mat-icon>
+        Administrador
+      </button>
+      <button class="btn-demo" type="button" (click)="quickLogin('employee')" [disabled]="loading">
+        <mat-icon style="font-size:16px;width:16px;height:16px">person</mat-icon>
+        Empleado
+      </button>
+    </div>
+  </div>
+</div>

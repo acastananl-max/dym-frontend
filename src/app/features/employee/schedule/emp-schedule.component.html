@@ -1,0 +1,25 @@
+<div class="page-content">
+  <div class="dym-card">
+    <div class="dym-card-header"><mat-icon style="color:#4caf50">calendar_month</mat-icon><span class="dym-card-title">Mi horario — Mayo 2026</span></div>
+    <div style="padding:14px;display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
+      <div *ngFor="let d of days" [style.background]="d.bg" style="border:1px solid #e2e8f0;border-radius:6px;padding:8px 4px;text-align:center">
+        <div [style.color]="d.color" style="font-weight:700;font-size:13px">{{d.num}}</div>
+        <div [style.color]="d.color" style="font-size:9px;margin-top:2px">{{d.label}}</div>
+      </div>
+    </div>
+  </div>
+  <div class="dym-card">
+    <div class="dym-card-header"><mat-icon style="color:#4caf50">wb_sunny</mat-icon><span class="dym-card-title">Mi turno asignado</span></div>
+    <div class="dym-card-body">
+      <div style="padding:18px;background:#e8f5e9;border-radius:10px;text-align:center;margin-bottom:16px">
+        <div style="font-size:36px">☀</div>
+        <div style="font-size:18px;font-weight:800;color:#2e7d32;margin:4px 0">Turno Mañana</div>
+        <div style="font-size:14px;color:#388e3c">06:00 – 14:00 horas</div>
+        <div style="font-size:12px;color:#4caf50;margin-top:4px">Ensamble A · Línea 3</div>
+      </div>
+      <div class="kv-row"><span class="kv-label">Tolerancia entrada</span><span class="kv-value">10 min</span></div>
+      <div class="kv-row"><span class="kv-label">Descanso</span><span class="kv-value">30 min</span></div>
+      <div class="kv-row"><span class="kv-label">Días laborales</span><span class="kv-value">Lunes a Sábado</span></div>
+    </div>
+  </div>
+</div>

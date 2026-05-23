@@ -1,0 +1,56 @@
+<div class="app-container">
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo-wrap">
+        <img class="sidebar-logo-img" src="assets/logo-dym.png" alt="DYM">
+        <div class="sidebar-brand">
+          <div class="sidebar-brand-name">AsistenteDYM</div>
+          <div class="sidebar-brand-sub">Portal del Empleado</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-nav">
+      <div class="nav-section-label">Mi Espacio</div>
+      <a class="nav-item" routerLink="/employee/dashboard" routerLinkActive="active">
+        <mat-icon>home</mat-icon>
+        <span class="nav-item-label">Mi Panel</span>
+      </a>
+      <a class="nav-item" routerLink="/employee/schedule" routerLinkActive="active">
+        <mat-icon>calendar_week</mat-icon>
+        <span class="nav-item-label">Mi Horario</span>
+      </a>
+      <a class="nav-item" routerLink="/employee/history" routerLinkActive="active">
+        <mat-icon>history</mat-icon>
+        <span class="nav-item-label">Mi Historial</span>
+      </a>
+      <a class="nav-item" routerLink="/employee/requests" routerLinkActive="active">
+        <mat-icon>send</mat-icon>
+        <span class="nav-item-label">Solicitudes</span>
+      </a>
+    </div>
+
+    <img src="assets/logo-dym.png" class="sidebar-logo-large" alt="">
+
+    <div class="sidebar-user">
+      <div class="avatar" style="background:#1e88e5;font-size:13px;font-weight:700;color:#fff">
+        {{fullName.charAt(0)}}
+      </div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name">{{fullName}}</div>
+        <div class="sidebar-user-role">{{department}}</div>
+      </div>
+      <button style="background:none;border:none;color:#8899aa;cursor:pointer;padding:4px" (click)="logout()" matTooltip="Cerrar sesión">
+        <mat-icon style="font-size:18px;width:18px;height:18px">logout</mat-icon>
+      </button>
+    </div>
+  </nav>
+
+  <div class="main-area">
+    <div class="topbar">
+      <div class="topbar-title">Mi Portal</div>
+      <div class="topbar-date">{{today}}</div>
+    </div>
+    <router-outlet />
+  </div>
+</div>

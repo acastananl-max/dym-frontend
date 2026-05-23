@@ -1,0 +1,72 @@
+<div class="page-content">
+  <!-- Clock Card -->
+  <div class="clock-card">
+    <div class="clock-ring-wrap">
+      <svg viewBox="0 0 90 90">
+        <circle cx="45" cy="45" r="38" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="5"/>
+        <circle cx="45" cy="45" r="38" fill="none" stroke="#81c784" stroke-width="5"
+          [attr.stroke-dasharray]="2*3.14159*38" [attr.stroke-dashoffset]="ringOffset"
+          stroke-linecap="round" transform="rotate(-90 45 45)" style="transition:stroke-dashoffset .5s"/>
+      </svg>
+      <div class="clock-ring-center">
+        <div class="clock-time-display">{{clockDisplay}}</div>
+        <div class="clock-ring-sub">trabajadas</div>
+      </div>
+    </div>
+    <div class="clock-main">
+      <div class="clock-status-label">{{clockedIn ? "✅ Dentro de planta" : "⏸ Fuera de planta"}}</div>
+      <div class="clock-status-sub">{{todayAtt?.checkIn ? "Entrada: " + formatTime(todayAtt!.checkIn) : "Sin marcaje activo"}}</div>
+      <div class="clock-shift-label">☀ Turno Mañana · 06:00 – 14:00 · Ensamble A</div>
+      <div class="clock-remaining" *ngIf="clockedIn">Salida esperada en: <strong>{{remaining}}</strong></div>
+    </div>
+    <div class="clock-btns">
+      <button class="btn-clock-in"  *ngIf="!clockedIn" (click)="checkIn()"><mat-icon>login</mat-icon>  Registrar entrada</button>
+      <button class="btn-clock-out" *ngIf="clockedIn"  (click)="checkOut()"><mat-icon>logout</mat-icon> Registrar salida</button>
+    </div>
+  </div>
+
+  <!-- Week -->
+  <div class="dym-card">
+    <div class="dym-card-header"><mat-icon style="color:#4caf50">calendar_view_week</mat-icon><span class="dym-card-title">Mi semana</span><span style="font-size:12px;color:#64748b">11 – 17 de mayo 2026</span></div>
+    <div style="padding:14px"><div class="week-grid">
+      <div class="week-day-card" *ngFor="let d of week" [class.today]="d.status==='live'">
+        <div class="week-day-label">{{d.day}}</div>
+        <div class="week-day-num">{{d.num}}</div>
+        <div class="week-day-dot" [class]="'dot-'+d.status"></div>
+        <div class="week-day-hours">{{d.hours}}</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Stats + Requests -->
+  <div class="grid-2">
+    <div class="dym-card">
+      <div class="dym-card-header"><mat-icon style="color:#4caf50">insights</mat-icon><span class="dym-card-title">Mi mayo</span></div>
+      <div class="dym-card-body">
+        <div class="stat-row"><span class="stat-label">Días trabajados</span><div class="stat-bar-wrap"><div class="stat-bar-fill" style="width:76%;background:#4caf50"></div></div><span class="stat-value">13/17</span></div>
+        <div class="stat-row"><span class="stat-label">Puntualidad</span><div class="stat-bar-wrap"><div class="stat-bar-fill" style="width:92%;background:#1e88e5"></div></div><span class="stat-value">92%</span></div>
+        <div class="stat-row"><span class="stat-label">Horas extra</span><div class="stat-bar-wrap"><div class="stat-bar-fill" style="width:44%;background:#8e24aa"></div></div><span class="stat-value">3.5h</span></div>
+        <div class="stat-row"><span class="stat-label">Tardanzas</span><div class="stat-bar-wrap"><div class="stat-bar-fill" style="width:6%;background:#ffa726"></div></div><span class="stat-value">1</span></div>
+        <div style="margin-top:12px;padding:10px 12px;background:#e8f5e9;border-radius:6px;font-size:12px;color:#2e7d32;display:flex;align-items:center;gap:7px">
+          <mat-icon style="font-size:16px;width:16px;height:16px">star</mat-icon> ¡Excelente asistencia este mes!
+        </div>
+      </div>
+    </div>
+    <div class="dym-card">
+      <div class="dym-card-header"><mat-icon style="color:#1e88e5">send</mat-icon><span class="dym-card-title">Mis solicitudes recientes</span></div>
+      <div *ngIf="myIncidents.length; else noReq">
+        <div class="incident-item" *ngFor="let inc of myIncidents">
+          <div class="incident-icon" style="background:#e3f2fd;color:#1565c0">
+            <mat-icon style="font-size:18px;width:18px;height:18px">{{typeIcon[inc.type]}}</mat-icon>
+          </div>
+          <div class="incident-info">
+            <div class="incident-title">{{typeLabel[inc.type]}}</div>
+            <div class="incident-sub">{{formatDate(inc.startDate)}} · {{inc.reason}}</div>
+          </div>
+          <span class="badge" [class]="'badge-'+inc.status.toLowerCase()">{{inc.status==="PENDING"?"Pendiente":inc.status==="APPROVED"?"Aprobado":"Rechazado"}}</span>
+        </div>
+      </div>
+      <ng-template #noReq><div class="empty-state"><mat-icon>inbox</mat-icon><p>Sin solicitudes recientes</p></div></ng-template>
+    </div>
+  </div>
+</div>

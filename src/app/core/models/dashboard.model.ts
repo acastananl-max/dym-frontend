@@ -1,0 +1,2 @@
+import { Attendance } from "./attendance.model";
+export interface DashboardSummary { totalEmployees: number; presentToday: number; absentToday: number; lateToday: number; pendingIncidents: number; extraMinutesToday: number; recentFeed: Attendance[]; }
